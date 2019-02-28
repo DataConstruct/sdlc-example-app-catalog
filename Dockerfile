@@ -25,8 +25,6 @@ COPY --from=publish /app .
 RUN mkdir -p /opt/appdynamics/dotnet
 ADD appd/libappdprofiler.so /opt/appdynamics/dotnet/
 ADD appd/AppDynamics.Agent.netstandard.dll /opt/appdynamics/dotnet/
-ADD appd/AppDynamicsConfig.json /opt/appdynamics/dotnet/
-
 # Mandatory settings required to attach the agent to the .NET application
 ENV CORECLR_PROFILER={57e1aa68-2229-41aa-9931-a6e93bbc64d8} \
     CORECLR_ENABLE_PROFILING=1 \
