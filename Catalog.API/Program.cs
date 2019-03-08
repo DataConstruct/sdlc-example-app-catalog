@@ -74,13 +74,6 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                         });
                     }
                 })
-                .UseSerilog((builderContext, config) =>
-                {
-                    config
-                        .MinimumLevel.Information()
-                        .Enrich.FromLogContext()
-                        .WriteTo.Console();
-                })
                 .Build();    
     }
 }
