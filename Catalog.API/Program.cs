@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using Gelf.Extensions.Logging;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
 using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
@@ -60,6 +61,18 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
+                    if (Environment.GetEnvironmentVariable("GRAYLOG_HOST") != null)
+                    {
+                        builder.AddGelf(options =>
+                        {
+                            options.LogSource = "catalog";
+                            options.AdditionalFields["app"] = "catalog";
+                            //hacky for now
+                            options.AdditionalFields["env"] = "prd";
+                            options.Host = Environment.GetEnvironmentVariable("GRAYLOG_HOST");
+                            options.Port = 12201;
+                        });
+                    }
                 })
                 .UseSerilog((builderContext, config) =>
                 {
