@@ -32,6 +32,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
+
 namespace Microsoft.eShopOnContainers.Services.Catalog.API
 {
     public class Startup
@@ -111,6 +112,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
     {
         public static IServiceCollection AddAppInsight(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer("catalog"));
             services.AddApplicationInsightsTelemetry(configuration);
             var orchestratorType = configuration.GetValue<string>("OrchestratorType");
 
