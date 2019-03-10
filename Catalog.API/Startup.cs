@@ -2,8 +2,6 @@
 using Autofac.Extensions.DependencyInjection;
 using global::Catalog.API.Infrastructure.Filters;
 using global::Catalog.API.IntegrationEvents;
-using Honeycomb.AspNetCore.Middleware;
-using Honeycomb.Models;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
 using Microsoft.AspNetCore.Builder;
@@ -55,13 +53,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                 .AddIntegrationServices(Configuration)
                 .AddEventBus(Configuration)
                 .AddSwagger()
-                .AddCustomHealthCheck(Configuration)
-                .AddHoneycomb(new HoneycombApiSettings {
-                    TeamId = Environment.GetEnvironmentVariable("HONEYCOMB_API_KEY"),
-                    DefaultDataSet = "Example",
-                    BatchSize = 100,
-                    SendFrequency = 10000,
-                });
+                .AddCustomHealthCheck(Configuration);
 
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -77,8 +69,6 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
             loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Trace);
 
             var pathBase = Configuration["PATH_BASE"];
-
-            app.UseHoneycomb();
 
             if (!string.IsNullOrEmpty(pathBase))
             {
